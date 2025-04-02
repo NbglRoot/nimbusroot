@@ -1,1 +1,31 @@
+/* imports: tailwind */
 @import "tailwindcss";
+
+/* fonts */
+@font-face {
+  font-family: "Open Sans";
+  src: url("/fonts/Open_Sans/static/OpenSans-Regular.ttf");
+  font-weight: 400;
+}
+@font-face {
+  font-family: "Raleway";
+  src: url("/fonts/Raleway/static/Raleway-Regular.ttf");
+  font-weight: 400;
+}
+
+/* tailwindcss theme */
+@theme {
+  --font-paraghaph: "Open Sans", sans-serif;
+  --font-titles: "Raleway", Arial;
+}
+
+/* general css */
+html {
+  color-scheme: dark;
+}
+
+body {
+  background-color: var(--color-gray-900);
+  font-family: "Open Sans", sans-serif;
+  letter-spacing: 0.1rem;
+}
