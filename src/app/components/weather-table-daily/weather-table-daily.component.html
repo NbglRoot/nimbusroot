@@ -1,0 +1,264 @@
+<div id="locationNameSearched" class="text-center mb-5">
+  <h3
+    title="Localización buscada: {{ locationNameSearched }}"
+    class="text-3xl first-letter:uppercase"
+  >
+    {{ locationNameSearched }}
+  </h3>
+</div>
+
+<div
+  *ngIf="locationNameSearched != ''; else nothingToDisplay"
+  id="tableDaily"
+  class="max-w-[900px] mx-auto overflow-x-auto *:my-10 animate__animated animate__fadeIn"
+>
+  <span class="flex items-center">
+    <span class="h-px flex-1 bg-gray-300 dark:bg-gray-600"></span>
+
+    <span
+    title="Temperatura Diaria de: {{ locationNameSearched }}"
+      class="shrink-0 hover:*:animate-pulse px-4 flex flex-wrap justify-center items-center text-gray-900 dark:text-white"
+    >
+      Temperatura
+      <svg
+        fill="#fff"
+        class="size-10"
+        viewBox="0 0 24 24"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <g id="Temp_High" data-name="Temp High">
+          <g>
+            <path
+              d="M14.863,13.4V4.939a2.929,2.929,0,0,0-.84-2.03,2.859,2.859,0,0,0-2.23-.82,2.948,2.948,0,0,0-2.66,3l.01,8.28a4.755,4.755,0,0,0,1.9,8.46,5.093,5.093,0,0,0,.95.09,4.759,4.759,0,0,0,4.76-4.75A4.684,4.684,0,0,0,14.863,13.4Zm-.48,6.66a3.783,3.783,0,0,1-3.15.78,3.7,3.7,0,0,1-2.92-2.98,3.745,3.745,0,0,1,1.43-3.69.962.962,0,0,0,.39-.77V5.089a1.968,1.968,0,0,1,1.73-2,.66.66,0,0,1,.14-.01,1.878,1.878,0,0,1,1.86,1.86V13.4a.962.962,0,0,0,.39.77,3.742,3.742,0,0,1,.13,5.89Z"
+            />
+            <path
+              d="M13.893,17.169a1.89,1.89,0,0,1-3.78,0,1.858,1.858,0,0,1,1.39-1.81V5.4a.5.5,0,0,1,1,0v9.96A1.869,1.869,0,0,1,13.893,17.169Z"
+            />
+          </g>
+        </g>
+      </svg>
+    </span>
+
+    <span class="h-px flex-1 bg-gray-300 dark:bg-gray-600"></span>
+  </span>
+  <table class="w-full divide-y-2 divide-gray-700 rounded-md bg-gray-800">
+    <thead class="ltr:text-left rtl:text-right">
+      <tr class="*:font-medium *:text-white">
+        <th class="px-3 py-2 whitespace-nowrap">Dia/Mes/Año</th>
+        <th class="px-3 py-2 whitespace-nowrap">Avgº</th>
+        <th class="px-3 py-2 whitespace-nowrap">Minº</th>
+        <th class="px-3 py-2 whitespace-nowrap">Maxº</th>
+      </tr>
+    </thead>
+
+    <tbody class="divide-y divide-gray-700 *:even:bg-gray-700">
+      <tr
+        *ngFor="let day of API_WEATHER_JSON"
+        class="*:first:font-medium *:text-white"
+      >
+        <td class="px-3 py-2 whitespace-nowrap">
+          {{ day.time | date : "dd/MM/yyyy" }}
+        </td>
+        <td class="px-3 py-2 whitespace-nowrap">
+          {{ day.values.temperatureAvg }}ºC
+        </td>
+        <td class="px-3 py-2 whitespace-nowrap">
+          {{ day.values.temperatureMin }}ºC
+        </td>
+        <td class="px-3 py-2 whitespace-nowrap">
+          {{ day.values.temperatureMax }}ºC
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div
+    id="table-moreInfo"
+    class="md:flex gap-1 justify-between *:my-10 animate__animated animate__fadeIn animate__slower"
+  >
+    <div id="humidity" class="md:w-[49%] *:my-2">
+      <span class="flex items-center">
+        <span class="h-px flex-1 bg-gray-300 dark:bg-gray-600"></span>
+
+        <span
+          title="Humedad Diaria de: {{ locationNameSearched }}"
+          class="flex gap-1 hover:*:animate-pulse flex-wrap justify-center items-center shrink-0 px-4 text-gray-900 dark:text-white"
+        >
+          Humedad
+          <svg
+            width="35px"
+            viewBox="0 0 1024 1024"
+            class="icon"
+            version="1.1"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M339.7 882.5C196.6 882.5 80.2 766.1 80.2 623c0-133.2 204.8-395.1 228.2-424.5 5.8-7.3 14.5-11.6 23.8-11.7 9.4-0.1 18.1 3.9 24.1 11 1.5 1.8 37.7 44.8 82.2 105.2 10.1 13.8 7.2 33.2-6.6 43.3-13.8 10.1-33.2 7.2-43.3-6.6-21.3-29-40.9-54-55.3-72.1-69.2 92-191.2 271.5-191.2 355.4 0 108.9 88.6 197.6 197.6 197.6S537.3 731.9 537.3 623c0-17.1 13.9-31 31-31s31 13.9 31 31c-0.1 143.1-116.5 259.5-259.6 259.5z"
+              fill="#fff"
+            />
+            <path
+              d="M363.7 468.8c-27.9 59.7-46.8 115.7-46.8 158.4 0 164.6 133.4 298 298 298s298-133.4 298-298c0-12.8-1.9-26.9-5.5-41.9-327.2 33.9-284.9-194.9-543.7-116.5z"
+              fill="#00B36A"
+            />
+            <path
+              d="M333.6 567.6c-38.2 239.9 123 357.7 287.3 357.7 92.8 0 144.9-12.1 199.6-78.6-261.5 20.7-428.7-99.2-486.9-279.1z"
+              fill="#009957"
+            />
+            <path
+              d="M614.9 956.1C433.5 956.1 286 808.5 286 627.2c0-173.4 283.4-532.4 295.5-547.6 5.8-7.3 14.5-11.6 23.8-11.7 9.3-0.1 18.1 3.9 24.1 11 2 2.3 49 58.2 106.8 136.6 10.1 13.8 7.2 33.2-6.6 43.3-13.8 10.1-33.2 7.2-43.3-6.6-31.8-43.2-60.6-79.8-79.9-103.7C517 266.1 347.9 512.3 347.9 627.2c0 147.2 119.8 267 267 267s267-119.8 267-267c0-29.7-13.2-87.9-76.4-196.2-8.6-14.8-3.6-33.7 11.2-42.3 14.8-8.6 33.7-3.6 42.3 11.2 57.1 97.9 84.8 172.2 84.8 227.4 0 181.3-147.6 328.8-328.9 328.8z"
+              fill="#fff"
+            />
+          </svg>
+        </span>
+
+        <span class="h-px flex-1 bg-gray-300 dark:bg-gray-600"></span>
+      </span>
+
+      <table class="w-full divide-y-2 divide-gray-700 rounded-md bg-gray-800">
+        <thead class="ltr:text-left rtl:text-right">
+          <tr class="*:font-medium *:text-white">
+            <th class="px-3 py-2 whitespace-nowrap">Dia/Mes/Año</th>
+            <th class="px-3 py-2 whitespace-nowrap">Avg</th>
+            <th class="px-3 py-2 whitespace-nowrap">Min</th>
+            <th class="px-3 py-2 whitespace-nowrap">Max</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-700 *:even:bg-gray-700">
+          <tr
+            *ngFor="let day of API_WEATHER_JSON"
+            class="*:first:font-medium *:text-white"
+          >
+            <td class="px-3 py-2 whitespace-nowrap">
+              {{ day.time | date : "dd/MM/yyyy" }}
+            </td>
+            <td class="px-3 py-2 whitespace-nowrap">
+              {{ day.values.humidityAvg }}%
+            </td>
+            <td class="px-3 py-2 whitespace-nowrap">
+              {{ day.values.humidityMin }}%
+            </td>
+            <td class="px-3 py-2 whitespace-nowrap">
+              {{ day.values.humidityMax }}%
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div id="precipitaition" class="md:w-[49%] *:my-2">
+      <span class="flex items-center">
+        <span class="h-px flex-1 bg-gray-300 dark:bg-gray-600"></span>
+
+        <span
+          title="Probabilidad de Precipitación Diaria de: {{ locationNameSearched }}"
+          class="flex flex-wrap hover:*:animate-pulse justify-center items-center gap-2 shrink-0 px-4 text-gray-900 dark:text-white"
+        >
+          Probabilidad de Precipitación
+
+          <svg
+            class="size-8"
+            version="1.1"
+            id="Layer_1"
+            xmlns="http://www.w3.org/2000/svg"
+            xmlns:xlink="http://www.w3.org/1999/xlink"
+            viewBox="0 0 480 480"
+            xml:space="preserve"
+          >
+            <circle style="fill: #fcb641" cx="341.632" cy="136.468" r="136" />
+            <g>
+              <path
+                style="fill: #92c7d3"
+                d="M89.992,479.532c-1.352,0-2.728-0.344-3.992-1.072c-3.832-2.208-5.136-7.104-2.928-10.928l28-48.496
+		c2.208-3.824,7.096-5.152,10.928-2.928c3.832,2.208,5.136,7.104,2.928,10.928l-28,48.496
+		C95.448,478.1,92.76,479.532,89.992,479.532z"
+              />
+              <path
+                style="fill: #92c7d3"
+                d="M137.992,479.532c-1.352,0-2.728-0.344-3.992-1.072c-3.832-2.208-5.136-7.104-2.928-10.928
+		l28-48.496c2.208-3.824,7.088-5.152,10.928-2.928c3.832,2.208,5.136,7.104,2.928,10.928l-28,48.496
+		C143.448,478.1,140.76,479.532,137.992,479.532z"
+              />
+              <path
+                style="fill: #92c7d3"
+                d="M185.992,479.532c-1.352,0-2.728-0.344-3.992-1.072c-3.832-2.208-5.136-7.104-2.928-10.928
+		l28-48.496c2.208-3.824,7.088-5.152,10.928-2.928c3.832,2.208,5.136,7.104,2.928,10.928l-28,48.496
+		C191.448,478.1,188.76,479.532,185.992,479.532z"
+              />
+              <path
+                style="fill: #92c7d3"
+                d="M233.992,479.532c-1.352,0-2.728-0.344-3.992-1.072c-3.832-2.208-5.136-7.104-2.928-10.928
+		l28-48.496c2.208-3.824,7.096-5.152,10.928-2.928c3.832,2.208,5.136,7.104,2.928,10.928l-28,48.496
+		C239.448,478.1,236.76,479.532,233.992,479.532z"
+              />
+              <path
+                style="fill: #92c7d3"
+                d="M281.992,479.532c-1.352,0-2.728-0.344-3.992-1.072c-3.832-2.208-5.136-7.104-2.928-10.928
+		l28-48.496c2.208-3.824,7.088-5.152,10.928-2.928c3.832,2.208,5.136,7.104,2.928,10.928l-28,48.496
+		C287.448,478.1,284.76,479.532,281.992,479.532z"
+              />
+              <path
+                style="fill: #92c7d3"
+                d="M329.992,479.532c-1.352,0-2.728-0.344-3.992-1.072c-3.832-2.208-5.136-7.104-2.928-10.928
+		l28-48.496c2.208-3.824,7.088-5.152,10.928-2.928c3.832,2.208,5.136,7.104,2.928,10.928l-28,48.496
+		C335.448,478.1,332.76,479.532,329.992,479.532z"
+              />
+              <path
+                style="fill: #92c7d3"
+                d="M377.992,479.532c-1.352,0-2.728-0.344-3.992-1.072c-3.832-2.208-5.136-7.104-2.928-10.928
+		l28-48.496c2.216-3.824,7.096-5.152,10.928-2.928c3.832,2.208,5.136,7.104,2.928,10.928l-28,48.496
+		C383.448,478.1,380.76,479.532,377.992,479.532z"
+              />
+              <path
+                style="fill: #92c7d3"
+                d="M426.208,275.284c-1.12,0-42.648,0-42.648,0c0.744-8,1.24-8.688,1.256-13.472
+		c0.128-42.672-28.36-79.952-70.032-89.136c-23.752-5.232-46.424-1.368-65.184,8.76c-22.888-34.064-60.808-57.04-104.272-59.696
+		c-5.592-0.768-11.256-1.224-17.056-1.224C57.432,120.516,0,179.78,0,252.836c0,38.072,15.688,72.304,40.648,96.44
+		c22.072,24.488,52.72,40.312,89.008,42.944c0,0,295.432,1.464,296.552,1.464c29.712,0,53.792-27.208,53.792-59.208
+		C480,302.492,455.912,275.284,426.208,275.284z"
+              />
+            </g>
+          </svg>
+        </span>
+
+        <span class="h-px flex-1 bg-gray-300 dark:bg-gray-600"></span>
+      </span>
+
+      <table class="w-full divide-y-2 divide-gray-700 rounded-md bg-gray-800">
+        <thead class="ltr:text-left rtl:text-right">
+          <tr class="*:font-medium *:text-white">
+            <th class="px-3 py-2 whitespace-nowrap">Dia/Mes/Año</th>
+            <th class="px-3 py-2 whitespace-nowrap">Avg</th>
+            <th class="px-3 py-2 whitespace-nowrap">Min</th>
+            <th class="px-3 py-2 whitespace-nowrap">Max</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-700 *:even:bg-gray-700">
+          <tr
+            *ngFor="let day of API_WEATHER_JSON"
+            class="*:first:font-medium *:text-white"
+          >
+            <td class="px-3 py-2 whitespace-nowrap">
+              {{ day.time | date : "dd/MM/yyyy" }}
+            </td>
+            <td class="px-3 py-2 whitespace-nowrap">
+              {{ day.values.precipitationProbabilityAvg }}%
+            </td>
+            <td class="px-3 py-2 whitespace-nowrap">
+              {{ day.values.precipitationProbabilityMin }}%
+            </td>
+            <td class="px-3 py-2 whitespace-nowrap">
+              {{ day.values.precipitationProbabilityMax }}%
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<ng-template #nothingToDisplay>
+  <h2 class="my-30 text-center text-2xl">
+    No hay nada que Mostrar. <br />
+    Busque la <b class="text-amber-100">ciudad</b> que desea.
+  </h2>
+</ng-template>
