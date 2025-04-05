@@ -290,18 +290,17 @@
       <tr class="*:font-medium *:text-white">
         <th class="px-3 py-2 whitespace-nowrap">Hora/Minutos</th>
         <th class="px-3 py-2 whitespace-nowrap">Temperaturaº</th>
-        <th class="px-3 py-2 whitespace-nowrap">Probabilidad de Precipitaciones %</th>
+        <th class="px-3 py-2 whitespace-nowrap text-center">Probabilidad <br> de <br> Precipitaciones %</th>
         <th class="px-3 py-2 whitespace-nowrap">Humedad %</th>
       </tr>
     </thead>
-
     <tbody class="divide-y divide-gray-700 *:even:bg-gray-700">
       <tr
         *ngFor="let day of API_WEATHER_JSON_HOUR"
         class="*:first:font-medium *:text-white"
       >
         <td class="px-3 py-2 whitespace-nowrap">
-          {{ (day.time | date : "hh:mm") }}
+          {{ (day.time | date : "hh:mm a") }}
         </td>
         <td class="px-3 py-2 whitespace-nowrap">
           {{ day.values.temperature }}ºC

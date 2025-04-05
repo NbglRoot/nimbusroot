@@ -30,21 +30,15 @@ export class WeatherTableDailyComponent implements OnChanges, OnInit {
 
   ngOnInit(): void {
     if (isPlatformBrowser(this.platformId)) {
-      if (
-        sessionStorage.getItem('API_WEATHER_JSON') &&
-        sessionStorage.getItem('locationNameSearched')
-      ) {
-        this.API_WEATHER_JSON_DAILY = JSON.parse(
-          sessionStorage.getItem('API_WEATHER_JSON_DAILY') || '{}'
-        );
-        this.locationNameSearched =
-          sessionStorage.getItem('locationNameSearched') || '';
-      }
-      if(sessionStorage.getItem('API_WEATHER_JSON_HOUR')) {
-        this.API_WEATHER_JSON_HOUR = JSON.parse(
-          sessionStorage.getItem('API_WEATHER_JSON_HOUR') || '{}'
-        );
-      }
+      this.API_WEATHER_JSON_DAILY = JSON.parse(
+        sessionStorage.getItem('API_WEATHER_JSON_DAILY') || '{}'
+      );
+      this.API_WEATHER_JSON_HOUR = JSON.parse(
+        sessionStorage.getItem('API_WEATHER_JSON_HOUR') || '{}'
+      );
+      this.locationNameSearched =
+        sessionStorage.getItem('locationNameSearched') || '';
+      this.WEATHER_OPTION = sessionStorage.getItem('WEATHER_OPTION') || 'daily';
     }
   }
 
@@ -56,37 +50,30 @@ export class WeatherTableDailyComponent implements OnChanges, OnInit {
       try {
         this.getDailyWeather();
       } catch (e) {
-        console.log('Error: Demasidas llamadas a la API.');
+        console.log(e);
       }
     }
   }
 
-  async getAPIResponse(url: string) {
-    const apiResponse = await fetch(url);
-    const dataRecivedJSON = await apiResponse.json();
-
-    return dataRecivedJSON;
-  }
-
+  
   getDailyWeather() {
-    if(this.WEATHER_OPTION !== 'daily') {
-      this.WEATHER_OPTION = 'daily';
-    }
+    this.WEATHER_OPTION = 'daily';
+    sessionStorage.setItem('WEATHER_OPTION', this.WEATHER_OPTION);
     (document.querySelector('#locationNameSearched') as HTMLElement).classList.add('animate-pulse');
-      const url: string =
-        this.URL_API +
-        this.locationNameSearched?.toLowerCase() +
-        this.API_KEY;
-
-      this.API_WEATHER_JSON_DAILY = [];
-      const dataRecivedJSON = this.getAPIResponse(url);
-      setTimeout(() => {
-        (document.querySelector('#locationNameSearched') as HTMLElement).classList.remove('animate-pulse');
-      }, 2000);
-      dataRecivedJSON.then((data) => {
+    const url: string =
+    this.URL_API +
+    this.locationNameSearched?.toLowerCase() +
+    this.API_KEY;
+    
+    this.API_WEATHER_JSON_DAILY = [];
+    const dataRecivedJSON = this.getAPIResponse(url);
+    setTimeout(() => {
+      (document.querySelector('#locationNameSearched') as HTMLElement).classList.remove('animate-pulse');
+    }, 2000);
+    dataRecivedJSON.then((data) => {
         if(data.code === 429001) {
           alert('Demasidas llamadas a la API. \nVuelva a intentarlo mas tarde.');
-          location.reload();
+          throw new Error("Demasidas llamadas a la API");
         }
         if (data.code && data.code === 400001) {
           alert('No se pudo encontrar la localización buscada');
@@ -105,33 +92,44 @@ export class WeatherTableDailyComponent implements OnChanges, OnInit {
           );
         }
       });
-  }
-
+    }
+    
   getHourlyWeather() {
     if(this.locationNameSearched) {
       this.WEATHER_OPTION = 'hourly';
+      sessionStorage.setItem('WEATHER_OPTION', this.WEATHER_OPTION);
       (document.querySelector('#locationNameSearched') as HTMLElement).classList.add('animate-pulse');
-        const url: string =
-          this.URL_API +
-          this.locationNameSearched.toLowerCase() +
-          this.API_KEY;
-  
-        this.API_WEATHER_JSON_HOUR = [];
-        const dataRecivedJSON = this.getAPIResponse(url);
-        setTimeout(() => {
-          (document.querySelector('#locationNameSearched') as HTMLElement).classList.remove('animate-pulse');
-        }, 2000);
-        dataRecivedJSON.then((data) => {
-          console.log(data.timelines.hourly[0]);
-            for (let index = 0; index < 11; index++) {
-              this.API_WEATHER_JSON_HOUR.push(data.timelines.hourly[index]);
-            }
-            sessionStorage.setItem(
-              'API_WEATHER_JSON_HOUR',
-              JSON.stringify(this.API_WEATHER_JSON_HOUR)
-            );
+      const url: string =
+      this.URL_API +
+      this.locationNameSearched.toLowerCase() +
+      this.API_KEY;
+      
+      this.API_WEATHER_JSON_HOUR = [];
+      const dataRecivedJSON = this.getAPIResponse(url);
+      setTimeout(() => {
+        (document.querySelector('#locationNameSearched') as HTMLElement).classList.remove('animate-pulse');
+      }, 2000);
+      dataRecivedJSON.then((data) => {
+        console.log(data.timelines.hourly[0]);
+        for (let index = 0; index < 11; index++) {
+          this.API_WEATHER_JSON_HOUR.push(data.timelines.hourly[index]);
           }
-        );
+          sessionStorage.setItem(
+            'API_WEATHER_JSON_HOUR',
+            JSON.stringify(this.API_WEATHER_JSON_HOUR)
+          );
+        }
+      );
     }
   }
+
+
+  // Get Api Response 
+  async getAPIResponse(url: string) {
+      const apiResponse = await fetch(url);
+      const dataRecivedJSON = await apiResponse.json();
+  
+      return dataRecivedJSON;
+  }  
 }
+  
