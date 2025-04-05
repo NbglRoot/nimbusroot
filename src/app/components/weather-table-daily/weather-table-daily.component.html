@@ -7,8 +7,19 @@
   </h3>
 </div>
 
+<h2 *ngIf="locationNameSearched == ''; else emptyOptions" class="my-30 text-center text-2xl">
+  No hay nada que Mostrar. <br />
+  Busque la <b class="text-amber-100">ciudad</b> que desea.
+</h2>
+
+<div *ngIf="locationNameSearched != ''; else emptyOptions" id="weatherOptions" class="flex flex-wrap gap-5 p-3 justify-center">
+  <button (click)="getDailyWeather()" class="p-3.5 focus:bg-blue-900/75 rounded-2xl bg-gray-800/75 border border-gray-800 hover:bg-gray-800 hover:border-gray-700" type="button">Días</button>
+  <button (click)="getHourlyWeather()" class="p-3.5 focus:bg-blue-900/75 rounded-2xl bg-gray-800/75 border border-gray-800 hover:bg-gray-800 hover:border-gray-700" type="button">Horas</button>
+</div>
+
+<!-- daily table -->
 <div
-  *ngIf="locationNameSearched != ''; else nothingToDisplay"
+  *ngIf="WEATHER_OPTION === 'daily' && locationNameSearched != '' ; else emptyOptions"
   id="tableDaily"
   class="max-w-[900px] mx-auto overflow-x-auto *:my-10 animate__animated animate__fadeIn"
 >
@@ -53,11 +64,11 @@
 
     <tbody class="divide-y divide-gray-700 *:even:bg-gray-700">
       <tr
-        *ngFor="let day of API_WEATHER_JSON"
+        *ngFor="let day of API_WEATHER_JSON_DAILY"
         class="*:first:font-medium *:text-white"
       >
         <td class="px-3 py-2 whitespace-nowrap">
-          {{ day.time | date : "dd/MM/yyyy" }}
+          {{ (day.time | date : "dd/MM/yyyy") }}
         </td>
         <td class="px-3 py-2 whitespace-nowrap">
           {{ day.values.temperatureAvg }}ºC
@@ -125,7 +136,7 @@
         </thead>
         <tbody class="divide-y divide-gray-700 *:even:bg-gray-700">
           <tr
-            *ngFor="let day of API_WEATHER_JSON"
+            *ngFor="let day of API_WEATHER_JSON_DAILY"
             class="*:first:font-medium *:text-white"
           >
             <td class="px-3 py-2 whitespace-nowrap">
@@ -234,7 +245,7 @@
         </thead>
         <tbody class="divide-y divide-gray-700 *:even:bg-gray-700">
           <tr
-            *ngFor="let day of API_WEATHER_JSON"
+            *ngFor="let day of API_WEATHER_JSON_DAILY"
             class="*:first:font-medium *:text-white"
           >
             <td class="px-3 py-2 whitespace-nowrap">
@@ -256,9 +267,54 @@
   </div>
 </div>
 
-<ng-template #nothingToDisplay>
-  <h2 class="my-30 text-center text-2xl">
-    No hay nada que Mostrar. <br />
-    Busque la <b class="text-amber-100">ciudad</b> que desea.
-  </h2>
-</ng-template>
+<!-- hourly table -->
+<div
+  *ngIf="WEATHER_OPTION === 'hourly' && locationNameSearched != '' ; else emptyOptions"
+  id="tableHourly"
+  class="max-w-[900px] mx-auto overflow-x-auto *:my-10 animate__animated animate__fadeIn"
+>
+  <span class="flex items-center">
+    <span class="h-px flex-1 bg-gray-300 dark:bg-gray-600"></span>
+
+    <span
+    title="Temperatura Diaria de: {{ locationNameSearched }}"
+      class="shrink-0 hover:*:animate-pulse px-4 flex flex-wrap justify-center items-center text-gray-900 dark:text-white"
+    >
+      Temperatura / Precipitación / Humedad
+    </span>
+
+    <span class="h-px flex-1 bg-gray-300 dark:bg-gray-600"></span>
+  </span>
+  <table class="w-max mx-auto divide-y-2 align-middle text-center divide-gray-700 rounded-md bg-gray-800">
+    <thead class="ltr:text-left rtl:text-right">
+      <tr class="*:font-medium *:text-white">
+        <th class="px-3 py-2 whitespace-nowrap">Hora/Minutos</th>
+        <th class="px-3 py-2 whitespace-nowrap">Temperaturaº</th>
+        <th class="px-3 py-2 whitespace-nowrap">Probabilidad de Precipitaciones %</th>
+        <th class="px-3 py-2 whitespace-nowrap">Humedad %</th>
+      </tr>
+    </thead>
+
+    <tbody class="divide-y divide-gray-700 *:even:bg-gray-700">
+      <tr
+        *ngFor="let day of API_WEATHER_JSON_HOUR"
+        class="*:first:font-medium *:text-white"
+      >
+        <td class="px-3 py-2 whitespace-nowrap">
+          {{ (day.time | date : "hh:mm") }}
+        </td>
+        <td class="px-3 py-2 whitespace-nowrap">
+          {{ day.values.temperature }}ºC
+        </td>
+        <td class="px-3 py-2 whitespace-nowrap">
+          {{ day.values.humidity }}%
+        </td>
+        <td class="px-3 py-2 whitespace-nowrap">
+          {{ day.values.precipitationProbability }}%
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<ng-template #emptyOptions></ng-template>
