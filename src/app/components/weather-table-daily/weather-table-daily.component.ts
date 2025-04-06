@@ -110,7 +110,6 @@ export class WeatherTableDailyComponent implements OnChanges, OnInit {
         (document.querySelector('#locationNameSearched') as HTMLElement).classList.remove('animate-pulse');
       }, 2000);
       dataRecivedJSON.then((data) => {
-        console.log(data.timelines.hourly[0]);
         for (let index = 0; index < 11; index++) {
           this.API_WEATHER_JSON_HOUR.push(data.timelines.hourly[index]);
           }
