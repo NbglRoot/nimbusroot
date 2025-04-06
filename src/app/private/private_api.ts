@@ -1,1 +1,1 @@
-export const PRIVATE_API = "&apikey=PF6YuNMLjexkYjkLQEHVlALjCLvrYNCZ";
+export const PRIVATE_API = "";
